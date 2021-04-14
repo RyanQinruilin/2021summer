@@ -1,0 +1,28 @@
+import os
+import pandas as pd
+
+#选择获取文件的路径
+file_dir = input('请输入文件路径：')
+output = input('请输入结果导出路径：')
+filenunm = []
+AllFile = []
+for root, dirs, files in os.walk(file_dir): 
+    print('*****************')
+    print(root) #当前目录路径 
+    #print(dirs) #当前路径下所有子目录 
+    print(files) #当前路径下所有非目录子文件
+    allFile = [root]+files
+    AllFile.append(allFile)
+    filenunm.append([root,files])
+prodata = pd.DataFrame(AllFile).T
+#prodata= pd.read_excel(r'C:\Users\APPLE\temp.xlsx')
+forlist = prodata.columns.values
+mergeData= pd.DataFrame()
+mergeData = prodata[[forlist[0]]].dropna()
+for colu in forlist:
+    drawData = prodata[[colu]].dropna()
+    drawData.columns = ['Unnamed: 0']
+    mergeData = pd.concat([mergeData,drawData])
+putPath = output+'\\文件目录.xlsx'
+mergeData[2:].to_excel(putPath)
+#选择输出文件的路径
